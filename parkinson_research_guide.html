@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Playbook · Shiitake Isocoumarins in a Drosophila Parkinson's Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3F1EA; --paper-2:#FBFAF5; --card:#FFFFFF;
+  --ink:#211E19; --ink-soft:#5A544C; --ink-faint:#8B8478;
+  --panel:#20241D; --panel-2:#2B3126; --panel-ink:#E7E3D6; --panel-faint:#9AA08C;
+  --amber:#B36B22; --amber-deep:#8A4E14; --amber-wash:#F5E9DA;
+  --violet:#5B3E8E; --violet-soft:#7B5CB2; --violet-wash:#ECE6F5;
+  --sage:#5E6E44; --sage-wash:#E6EAD9;
+  --teal:#2E6F6A; --teal-wash:#DDECEA;
+  --danger:#A23A28; --danger-wash:#F6E3DE;
+  --line:#DED9CD; --line-soft:#EAE6DB;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --disp:'Fraunces',Georgia,serif;
+  --body:'Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--body);font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.app{display:grid;grid-template-columns:288px 1fr;min-height:100vh}
+
+/* ---------- SIDEBAR ---------- */
+.side{
+  background:var(--panel);color:var(--panel-ink);
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  padding:26px 20px 40px;border-right:1px solid #000;
+}
+.brand-eyebrow{
+  font-family:var(--mono);font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--panel-faint);margin:0 0 10px;
+}
+.brand-title{
+  font-family:var(--disp);font-weight:600;font-size:22px;line-height:1.15;
+  margin:0 0 4px;color:#fff;font-optical-sizing:auto;
+}
+.brand-sub{font-size:12.5px;color:var(--panel-faint);margin:6px 0 20px;line-height:1.5}
+.brand-meta{
+  font-size:11.5px;color:var(--panel-faint);border-top:1px solid #3a4033;
+  padding-top:14px;margin-top:6px;line-height:1.7;
+}
+.brand-meta b{color:var(--panel-ink);font-weight:600}
+nav{margin-top:22px;display:flex;flex-direction:column;gap:2px}
+.nav-group{
+  font-family:var(--mono);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:#6d7360;margin:16px 8px 6px;
+}
+.tab-btn{
+  display:flex;align-items:center;gap:11px;width:100%;text-align:left;
+  background:none;border:none;color:var(--panel-ink);cursor:pointer;
+  font-family:var(--body);font-size:14px;font-weight:500;
+  padding:9px 11px;border-radius:8px;transition:background .15s,color .15s;
+  line-height:1.25;
+}
+.tab-btn:hover{background:#2f342a}
+.tab-btn .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;background:var(--panel-faint)}
+.tab-btn[data-track="chem"] .dot{background:var(--amber)}
+.tab-btn[data-track="bio"] .dot{background:var(--violet-soft)}
+.tab-btn[data-track="both"] .dot{background:linear-gradient(90deg,var(--amber) 50%,var(--violet-soft) 50%)}
+.tab-btn.active{background:#fff;color:var(--panel);font-weight:600}
+.tab-btn.active .dot{box-shadow:0 0 0 3px rgba(0,0,0,.06)}
+.tab-num{font-family:var(--mono);font-size:11px;color:var(--panel-faint);margin-left:auto}
+.tab-btn.active .tab-num{color:var(--ink-faint)}
+
+/* ---------- MAIN ---------- */
+.main{min-width:0}
+.topbar{display:none}
+.wrap{max-width:900px;margin:0 auto;padding:54px 56px 120px}
+.panel{display:none;animation:fade .4s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--amber-deep);margin:0 0 14px;display:flex;align-items:center;gap:10px;
+}
+.eyebrow.bio{color:var(--violet)}
+.eyebrow::before{content:"";width:26px;height:2px;background:currentColor;display:inline-block}
+h1{
+  font-family:var(--disp);font-weight:600;font-size:clamp(30px,4.4vw,46px);line-height:1.06;
+  letter-spacing:-.015em;margin:0 0 18px;font-optical-sizing:auto;
+}
+h2{
+  font-family:var(--disp);font-weight:600;font-size:26px;line-height:1.15;
+  margin:44px 0 4px;letter-spacing:-.01em;
+}
+h2 .h2-kicker{display:block;font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--amber-deep);margin-bottom:8px}
+h3{font-family:var(--disp);font-weight:600;font-size:19px;margin:30px 0 6px;letter-spacing:-.005em}
+h4{font-size:14px;font-weight:700;margin:20px 0 4px;letter-spacing:.01em}
+p{margin:12px 0}
+.lead{font-size:18.5px;line-height:1.55;color:var(--ink-soft);max-width:64ch}
+strong{font-weight:600;color:var(--ink)}
+a{color:var(--amber-deep);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.mono{font-family:var(--mono)}
+.sci{font-style:italic}
+
+.divider{height:1px;background:var(--line);margin:34px 0;border:none}
+
+/* cards + callouts */
+.grid{display:grid;gap:16px;margin:22px 0}
+.g2{grid-template-columns:1fr 1fr}
+.g3{grid-template-columns:1fr 1fr 1fr}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;
+}
+.card h4{margin-top:0}
+.card p{margin:6px 0;font-size:14.5px;color:var(--ink-soft)}
+.card .big{font-family:var(--disp);font-size:30px;font-weight:600;color:var(--ink);line-height:1}
+.card .big-label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:6px}
+
+.note{border-radius:12px;padding:15px 18px 15px 18px;margin:20px 0;font-size:14.5px;border:1px solid;position:relative}
+.note p{margin:6px 0}
+.note .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;display:block;margin-bottom:5px}
+.note.why{background:var(--violet-wash);border-color:#d8cae9;color:#3d2c5c}
+.note.why .tag{color:var(--violet)}
+.note.tip{background:var(--sage-wash);border-color:#cdd6ba;color:#3c4a29}
+.note.tip .tag{color:var(--sage)}
+.note.warn{background:var(--danger-wash);border-color:#eac9c1;color:#7c2c1e}
+.note.warn .tag{color:var(--danger)}
+.note.data{background:var(--teal-wash);border-color:#c2ddd9;color:#204f4b}
+.note.data .tag{color:var(--teal)}
+
+/* tables */
+.tbl-wrap{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:13.8px;background:var(--card)}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line-soft);vertical-align:top}
+thead th{
+  background:var(--panel);color:var(--panel-ink);font-weight:600;font-size:12px;
+  letter-spacing:.04em;position:sticky;top:0;
+}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:nth-child(even){background:#faf9f4}
+td .mono{font-size:12.5px}
+.pill{display:inline-block;font-family:var(--mono);font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.pill.chem{background:var(--amber-wash);color:var(--amber-deep)}
+.pill.bio{background:var(--violet-wash);color:var(--violet)}
+.pill.ctrl{background:#e9e6de;color:var(--ink-soft)}
+
+/* step list */
+.steps{counter-reset:s;list-style:none;padding:0;margin:22px 0}
+.steps>li{
+  position:relative;padding:2px 0 22px 52px;border-left:2px solid var(--line);margin-left:16px;
+}
+.steps>li:last-child{border-left-color:transparent;padding-bottom:0}
+.steps>li::before{
+  counter-increment:s;content:counter(s);position:absolute;left:-17px;top:-2px;
+  width:32px;height:32px;border-radius:50%;background:var(--amber);color:#fff;
+  font-family:var(--mono);font-weight:600;font-size:14px;
+  display:flex;align-items:center;justify-content:center;
+}
+.steps.bio>li::before{background:var(--violet)}
+.steps>li h4{margin:0 0 3px;font-size:15.5px}
+.steps>li p{margin:4px 0;font-size:14.5px;color:var(--ink-soft)}
+
+ul.clean{padding-left:20px;margin:12px 0}
+ul.clean li{margin:6px 0;font-size:15px}
+ul.clean li::marker{color:var(--amber)}
+
+/* pipeline signature */
+.pipe{background:var(--panel);border-radius:16px;padding:26px 24px;margin:26px 0;color:var(--panel-ink)}
+.pipe-h{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--panel-faint);margin-bottom:18px}
+.track{display:flex;align-items:stretch;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.track-label{font-family:var(--mono);font-size:11px;writing-mode:horizontal-tb;
+  min-width:76px;display:flex;align-items:center;font-weight:600;letter-spacing:.05em}
+.tl-chem{color:var(--amber)}
+.tl-bio{color:var(--violet-soft)}
+.node{background:#2c3227;border:1px solid #3c4334;border-radius:9px;padding:9px 12px;
+  font-size:12.5px;flex:1;min-width:96px;line-height:1.3}
+.node b{display:block;color:#fff;font-size:12.5px}
+.node span{color:var(--panel-faint);font-size:11px}
+.arrow{align-self:center;color:#565c4c}
+.converge{text-align:center;font-family:var(--mono);font-size:11px;color:var(--panel-faint);margin:8px 0}
+.node.merge{background:linear-gradient(90deg,#3a2f1f,#2e2740);border-color:#4a4438;flex:0 0 auto;margin:0 auto}
+
+/* KPI strip */
+.kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:26px 0}
+.kpi div{background:var(--paper-2);padding:16px 16px}
+.kpi .n{font-family:var(--disp);font-size:23px;font-weight:600;line-height:1}
+.kpi .l{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);margin-top:6px}
+
+/* gantt */
+.gantt{margin:24px 0;font-size:13px}
+.gantt-row{display:grid;grid-template-columns:150px 1fr;gap:12px;align-items:center;margin:7px 0}
+.gantt-row .lab{font-weight:500;font-size:13px}
+.bar-track{background:var(--line-soft);border-radius:6px;height:22px;position:relative;overflow:hidden}
+.bar{position:absolute;top:0;height:100%;border-radius:6px;display:flex;align-items:center;
+  padding-left:8px;color:#fff;font-family:var(--mono);font-size:10.5px;white-space:nowrap}
+.bar.c{background:var(--amber)}
+.bar.b{background:var(--violet-soft)}
+.bar.a{background:var(--sage)}
+.gantt-scale{display:grid;grid-template-columns:150px 1fr;gap:12px;margin-bottom:2px}
+.gantt-scale .months{display:grid;grid-template-columns:repeat(12,1fr);font-family:var(--mono);
+  font-size:9.5px;color:var(--ink-faint);text-align:center}
+
+.footer-note{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);
+  font-size:12.5px;color:var(--ink-faint);font-family:var(--mono);line-height:1.7}
+
+/* responsive */
+@media(max-width:880px){
+  .app{grid-template-columns:1fr}
+  .side{display:none}
+  .topbar{display:block;position:sticky;top:0;z-index:40;background:var(--panel);color:#fff;
+    padding:14px 18px;border-bottom:1px solid #000}
+  .topbar .tt{font-family:var(--disp);font-size:16px;font-weight:600}
+  .topbar select{width:100%;margin-top:10px;padding:10px 12px;border-radius:9px;border:1px solid #3c4334;
+    background:#2b3126;color:#fff;font-family:var(--body);font-size:14px}
+  .wrap{padding:30px 20px 90px}
+  .g2,.g3{grid-template-columns:1fr}
+  .kpi{grid-template-columns:1fr 1fr}
+  .gantt-row{grid-template-columns:96px 1fr}
+  .gantt-scale{grid-template-columns:96px 1fr}
+}
+:focus-visible{outline:3px solid var(--violet-soft);outline-offset:2px;border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="side">
+    <p class="brand-eyebrow">BMS Research Playbook</p>
+    <h1 class="brand-title" style="font-size:22px;margin:0">Shiitake Isocoumarins vs. Parkinson's</h1>
+    <p class="brand-sub">A neuroprotection study in a <span class="sci">Drosophila</span> rotenone model — from mushroom molecule to motor readout.</p>
+
+    <nav id="nav">
+      <div class="nav-group">Frame the study</div>
+      <button class="tab-btn active" data-track="both" data-tab="overview"><span class="dot"></span>Overview<span class="tab-num">00</span></button>
+      <button class="tab-btn" data-track="both" data-tab="science"><span class="dot"></span>The Science<span class="tab-num">01</span></button>
+      <button class="tab-btn" data-track="both" data-tab="design"><span class="dot"></span>Aim &amp; Design<span class="tab-num">02</span></button>
+      <div class="nav-group">Do the work</div>
+      <button class="tab-btn" data-track="chem" data-tab="chemistry"><span class="dot"></span>Track A · Chemistry<span class="tab-num">03</span></button>
+      <button class="tab-btn" data-track="bio" data-tab="flymodel"><span class="dot"></span>Track B · Fly Model<span class="tab-num">04</span></button>
+      <button class="tab-btn" data-track="bio" data-tab="assays"><span class="dot"></span>Assays &amp; Readouts<span class="tab-num">05</span></button>
+      <button class="tab-btn" data-track="chem" data-tab="reagents"><span class="dot"></span>Chemicals &amp; Dosing<span class="tab-num">06</span></button>
+      <div class="nav-group">Make sense of it</div>
+      <button class="tab-btn" data-track="both" data-tab="data"><span class="dot"></span>Data &amp; Analysis<span class="tab-num">07</span></button>
+      <button class="tab-btn" data-track="both" data-tab="timeline"><span class="dot"></span>Timeline &amp; Cost<span class="tab-num">08</span></button>
+      <button class="tab-btn" data-track="both" data-tab="ways"><span class="dot"></span>Other Ways In<span class="tab-num">09</span></button>
+      <button class="tab-btn" data-track="both" data-tab="refs"><span class="dot"></span>References &amp; Kit<span class="tab-num">10</span></button>
+    </nav>
+
+    <div class="brand-meta">
+      <b>Students</b> · S.P. Kavinsree, J. Shreya<br>
+      <b>Guide</b> · Dr. V. Deepa Parvathi<br>
+      <b>HOD</b> · Dr. A. Sumathy<br>
+      <span style="color:#6d7360">Dept. of Biomedical Sciences</span>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="tt">Research Playbook</div>
+      <select id="mobileNav" aria-label="Jump to section"></select>
+    </div>
+    <div class="wrap">
+
+    <!-- ============ 00 OVERVIEW ============ -->
+    <section class="panel active" id="overview">
+      <p class="eyebrow">Playbook 00 · The big picture</p>
+      <h1>One molecule from a mushroom, tested against a disease — in a fly.</h1>
+      <p class="lead">This project asks a clean, testable question: can tiny <strong>isocoumarin</strong> molecules purified from <span class="sci">shiitake</span> mushroom mycelium protect the brain against a Parkinson's-like injury? To answer it you run two research tracks that meet in the middle — a <strong>chemistry track</strong> that makes and identifies the drug, and a <strong>biology track</strong> that tests it in a living animal model.</p>
+
+      <div class="kpi">
+        <div><div class="n">1</div><div class="l">Purified compound class</div></div>
+        <div><div class="n">7</div><div class="l">Experimental groups</div></div>
+        <div><div class="n">3</div><div class="l">Readout families</div></div>
+        <div><div class="n">~6&nbsp;mo</div><div class="l">Realistic timeline</div></div>
+      </div>
+
+      <div class="pipe">
+        <div class="pipe-h">The two-track pipeline — where the whole project lives</div>
+        <div class="track">
+          <div class="track-label tl-chem">TRACK A<br>chemistry</div>
+          <div class="node"><b>Grow mycelium</b><span>Lentinus edodes culture</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Extract</b><span>solvent + rotovap</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Purify</b><span>column + HPLC</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Identify</b><span>LC-MS · NMR</span></div>
+        </div>
+        <div class="track">
+          <div class="track-label tl-bio">TRACK B<br>biology</div>
+          <div class="node"><b>Rear flies</b><span>Drosophila stock</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Induce PD</b><span>rotenone in food</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Assign groups</b><span>dose the diet</span></div>
+          <div class="arrow">→</div>
+          <div class="node"><b>Read out</b><span>behaviour · biochem</span></div>
+        </div>
+        <div class="converge">▼ &nbsp; the tracks converge &nbsp; ▼</div>
+        <div style="text-align:center"><div class="node merge"><b>Does the isocoumarin rescue the flies?</b><span>climbing ↑ · SOD/CAT/GSH ↑ · MDA ↓ · lifespan ↑</span></div></div>
+      </div>
+
+      <h2><span class="h2-kicker">Read this first</span>How the tabs map to your actual work</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Tab</th><th>What you'll settle there</th><th>Track</th></tr></thead>
+          <tbody>
+            <tr><td><b>The Science</b></td><td>Why rotenone, why flies, why isocoumarins — the reasoning you defend in your viva</td><td><span class="pill ctrl">both</span></td></tr>
+            <tr><td><b>Aim &amp; Design</b></td><td>Hypotheses, the 7 groups, variables, how many flies</td><td><span class="pill ctrl">both</span></td></tr>
+            <tr><td><b>Track A · Chemistry</b></td><td>Making and proving the identity of your compound</td><td><span class="pill chem">chem</span></td></tr>
+            <tr><td><b>Track B · Fly Model</b></td><td>Rearing flies, inducing disease, dosing the diet</td><td><span class="pill bio">bio</span></td></tr>
+            <tr><td><b>Assays &amp; Readouts</b></td><td>The exact tests that generate your numbers</td><td><span class="pill bio">bio</span></td></tr>
+            <tr><td><b>Chemicals &amp; Dosing</b></td><td>Every reagent, its concentration, and the signal it produces</td><td><span class="pill chem">chem</span></td></tr>
+            <tr><td><b>Data &amp; Analysis</b></td><td>Which graph, which stats test, what "success" looks like</td><td><span class="pill ctrl">both</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note why">
+        <span class="tag">The one-sentence thesis</span>
+        <p>If oxidative stress drives the Parkinson's-like damage rotenone causes, then an antioxidant molecule that can enter the fly's system should <em>measurably</em> reduce that damage — and you can see it in how well the flies climb, how much antioxidant enzyme activity survives, and how long they live.</p>
+      </div>
+    </section>
+
+    <!-- ============ 01 SCIENCE ============ -->
+    <section class="panel" id="science">
+      <p class="eyebrow">Playbook 01 · The reasoning</p>
+      <h1>The science you'll be asked to defend.</h1>
+      <p class="lead">Every choice in this project answers a "why". Get these four right and the rest of the study is just careful execution.</p>
+
+      <h2><span class="h2-kicker">Why 1 · The disease</span>What Parkinson's actually is here</h2>
+      <p>Parkinson's disease is the progressive death of <strong>dopaminergic neurons</strong> in a midbrain region called the <span class="sci">substantia nigra</span>. Dopamine is the neurotransmitter that lets the brain smoothly initiate and control movement, so as those neurons die you get the classic motor signs — tremor, rigidity, slowness (bradykinesia), and postural instability.</p>
+      <p>Two mechanisms sit at the centre of why the neurons die, and both are things you can actually <em>measure</em>:</p>
+      <div class="grid g2">
+        <div class="card"><h4>Oxidative stress</h4><p>Reactive oxygen species (ROS) build up faster than the cell's antioxidant defences can neutralise them. They damage lipids, proteins and DNA. Dopaminergic neurons are unusually vulnerable because dopamine metabolism itself generates ROS.</p></div>
+        <div class="card"><h4>Neuroinflammation</h4><p>Glial cells become chronically activated, releasing inflammatory mediators that add to the injury. It amplifies and sustains the damage started by oxidative stress.</p></div>
+      </div>
+      <div class="note why"><span class="tag">Why it matters for you</span><p>Because oxidative stress is central, an <strong>antioxidant</strong> compound is a mechanistically sensible thing to test. Your whole hypothesis rides on this link — that's why you measure antioxidant enzymes (SOD, CAT, GSH) as your biochemical proof.</p></div>
+
+      <h2><span class="h2-kicker">Why 2 · The trigger</span>Why rotenone builds a Parkinson's model</h2>
+      <p><strong>Rotenone</strong> is a naturally occurring pesticide that blocks <strong>Complex I</strong> of the mitochondrial electron-transport chain. Blocking Complex I does two things at once: it starves the cell of ATP and it causes electrons to leak and form ROS. That combination selectively injures dopaminergic neurons and reproduces both the <em>motor deficits</em> and the <em>oxidative stress signature</em> of Parkinson's — which is exactly why it's a standard PD model (this is the model established in your cited Coulom &amp; Birman, 2004).</p>
+      <div class="note data"><span class="tag">The elegance of it</span><p>Rotenone doesn't just "make flies sick" — it makes them sick through the <em>same mechanism</em> your drug is supposed to counter. Injury by oxidation, rescue by antioxidant. That mechanistic match is what makes the experiment interpretable.</p></div>
+
+      <h2><span class="h2-kicker">Why 3 · The animal</span>Why <span class="sci" style="font-family:var(--disp)">Drosophila melanogaster</span></h2>
+      <ul class="clean">
+        <li><strong>It has a real dopaminergic system and a brain</strong> — so rotenone produces genuine, measurable motor decline, not just toxicity.</li>
+        <li><strong>Fast and cheap</strong> — a full generation in ~10 days, hundreds of animals, minimal cost. Perfect for a student project on a real budget.</li>
+        <li><strong>~75% of human disease genes have a fly counterpart</strong> — findings translate meaningfully toward mammalian work.</li>
+        <li><strong>Simple, quantitative behaviour</strong> — the climbing (negative geotaxis) assay gives you a clean number for motor function.</li>
+        <li><strong>Ethically light</strong> — invertebrate work sidesteps the heavy regulatory load of rodent studies.</li>
+      </ul>
+
+      <h2><span class="h2-kicker">Why 4 · The drug</span>Why isocoumarins from shiitake</h2>
+      <p>Shiitake (<span class="sci">Lentinus edodes</span>) is famous for its polysaccharide <strong>lentinan</strong> — but polysaccharides are large and hard to deliver. Recent work (your cited Xu et al., 2024) found a different class of <em>small-molecule</em> secondary metabolites in shiitake: <strong>isocoumarins</strong> such as the <strong>hydroxymelleins</strong> and <strong>lentincoumarins</strong>. These carry notable <strong>antioxidant and anti-inflammatory</strong> activity.</p>
+      <div class="note tip"><span class="tag">Why "small" is the whole point</span><p>Small molecules can cross membranes and potentially the blood–brain barrier in ways big polysaccharides can't. If a small, cheap, food-derived antioxidant works, it's a far more promising lead for a real "functional food" or drug. That's the novelty your project is built on — and your best answer to "so what?"</p></div>
+
+      <div class="divider"></div>
+      <div class="note warn"><span class="tag">Honest limitation to state up front</span><p>A fly is not a human. This is a <em>screening</em> study — proof-of-concept that a compound is worth taking into mammalian models. Framing it this way (rather than over-claiming a cure) is what makes it credible science.</p></div>
+    </section>
+
+    <!-- ============ 02 DESIGN ============ -->
+    <section class="panel" id="design">
+      <p class="eyebrow">Playbook 02 · The blueprint</p>
+      <h1>Turning the aim into a design you can actually run.</h1>
+      <p class="lead">A project fails or passes here. Before touching a fly, lock down your hypotheses, your groups, and your variables.</p>
+
+      <h2><span class="h2-kicker">From objective to hypothesis</span>State it so it can be proven wrong</h2>
+      <div class="grid g2">
+        <div class="card"><h4>Null hypothesis (H₀)</h4><p>Shiitake isocoumarin treatment has <strong>no effect</strong> on rotenone-induced motor decline, oxidative-stress markers, or lifespan in <span class="sci">Drosophila</span>.</p></div>
+        <div class="card"><h4>Alternative hypothesis (H₁)</h4><p>Isocoumarin treatment <strong>significantly improves</strong> climbing, restores antioxidant enzyme activity, lowers lipid peroxidation, and extends lifespan versus rotenone-only flies — in a <strong>dose-dependent</strong> way.</p></div>
+      </div>
+
+      <h2><span class="h2-kicker">The experimental groups</span>Seven groups — and why each exists</h2>
+      <p>Every group answers a specific "what if someone objects that…". Missing groups are the number-one reason a viva panel picks a project apart.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Group</th><th>Diet</th><th>The objection it defeats</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td><span class="pill ctrl">CTRL</span> Untreated control</td><td class="mono">Normal food</td><td>"What does a healthy fly even look like?" — your baseline.</td></tr>
+            <tr><td>2</td><td><span class="pill bio">MODEL</span> Rotenone only</td><td class="mono">Food + rotenone</td><td>"Did the disease model even work?" — your positive damage control.</td></tr>
+            <tr><td>3</td><td><span class="pill chem">TX-Lo</span> Rotenone + low dose</td><td class="mono">Rotenone + iso (low)</td><td rowspan="3">"Is any effect real and does more drug do more?" — dose–response.</td></tr>
+            <tr><td>4</td><td><span class="pill chem">TX-Mid</span> Rotenone + mid dose</td><td class="mono">Rotenone + iso (mid)</td></tr>
+            <tr><td>5</td><td><span class="pill chem">TX-Hi</span> Rotenone + high dose</td><td class="mono">Rotenone + iso (high)</td></tr>
+            <tr><td>6</td><td><span class="pill chem">TOX</span> Compound only</td><td class="mono">Food + iso (high)</td><td>"Is the compound itself toxic?" — safety / vehicle control.</td></tr>
+            <tr><td>7</td><td><span class="pill ctrl">REF</span> Reference drug</td><td class="mono">Rotenone + L-DOPA <span style="color:var(--ink-faint)">or a known antioxidant</span></td><td>"How does your compound compare to something that's known to help?"</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note tip"><span class="tag">Design tip</span><p>Also include a <strong>vehicle control</strong>: if you dissolve your isocoumarin in a trace of DMSO or ethanol, one group must get rotenone + that same solvent with no drug, so any effect can't be blamed on the solvent.</p></div>
+
+      <h2><span class="h2-kicker">Variables</span>Name them explicitly — examiners ask</h2>
+      <div class="grid g3">
+        <div class="card"><h4>Independent</h4><p>Presence of rotenone; isocoumarin dose (0 / low / mid / high).</p></div>
+        <div class="card"><h4>Dependent (measured)</h4><p>% climbing success; SOD, CAT, GSH activity; MDA level; dopamine content; survival.</p></div>
+        <div class="card"><h4>Controlled (kept constant)</h4><p>Temperature (25&nbsp;°C), 12:12 light cycle, humidity, fly age &amp; sex, food batch, handling time.</p></div>
+      </div>
+
+      <h2><span class="h2-kicker">Statistical power</span>How many flies, and how many times</h2>
+      <ul class="clean">
+        <li><strong>≥ 3 biological replicates</strong> per group — three independent vials set up on different days, not three counts of one vial.</li>
+        <li><strong>~20–30 flies per replicate vial</strong> for behaviour; pool ~20–30 flies per replicate for each biochemical assay (you need enough tissue).</li>
+        <li><strong>Age- and sex-matched</strong> adults (commonly males, 3–5 days old) to remove those as confounders.</li>
+        <li><strong>Blind your scoring</strong> where possible — code the vials so the person counting climbing doesn't know the group.</li>
+      </ul>
+      <div class="note data"><span class="tag">Rule of thumb</span><p>7 groups × 3 replicates × ~30 flies ≈ <strong>~630 flies</strong> per full run for behaviour, plus separate cohorts for the biochemistry (which is destructive — you homogenise the flies). Budget your fly numbers before you start.</p></div>
+    </section>
+
+    <!-- ============ 03 CHEMISTRY ============ -->
+    <section class="panel" id="chemistry">
+      <p class="eyebrow">Playbook 03 · Track A</p>
+      <h1>Making the molecule and proving what it is.</h1>
+      <p class="lead">This track produces a small amount of purified, <em>identified</em> isocoumarin. "Identified" is doing heavy lifting — a reviewer will not accept "we extracted something antioxidant." You must show <strong>what</strong> the molecule is and <strong>how pure</strong> it is.</p>
+
+      <ol class="steps">
+        <li>
+          <h4>Culture the mycelium</h4>
+          <p>Grow <span class="sci">Lentinus edodes</span> mycelium in liquid culture — e.g. <strong>potato-dextrose broth</strong> or malt extract broth — in shake flasks, sterile, ~25&nbsp;°C, for <strong>2–4 weeks</strong>. Mycelium is used (not fruiting bodies) because it's faster to grow and is where these secondary metabolites are produced. Harvest by filtration.</p>
+        </li>
+        <li>
+          <h4>Extract the crude compounds</h4>
+          <p>Freeze-dry (lyophilise) the mycelial biomass, then do a <strong>solvent extraction</strong>. Isocoumarins are mid-polarity, so <strong>ethyl acetate</strong> or <strong>methanol</strong> (often a sequential polarity series: hexane → ethyl acetate → methanol) pulls them out. Filter, then concentrate on a <strong>rotary evaporator</strong> under reduced pressure to get a crude extract.</p>
+        </li>
+        <li>
+          <h4>Fractionate by column chromatography</h4>
+          <p>Load the crude extract onto a <strong>silica-gel column</strong> and elute with a gradient (e.g. increasing ethyl acetate in hexane). This separates the crude mixture into fractions by polarity. Track fractions with <strong>thin-layer chromatography (TLC)</strong> — spots under UV tell you which fractions contain your target.</p>
+        </li>
+        <li>
+          <h4>Purify to a single compound (HPLC)</h4>
+          <p>Take the isocoumarin-containing fractions and polish them on <strong>preparative reverse-phase HPLC</strong> (a C18 column, water/acetonitrile or water/methanol gradient). A single sharp peak = a pure compound. This is the purity step your project explicitly calls for.</p>
+        </li>
+        <li>
+          <h4>Confirm identity &amp; purity (the proof)</h4>
+          <p>Now identify what you actually isolated, using complementary methods — no single one is enough:</p>
+        </li>
+      </ol>
+
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Method</th><th>What it tells you</th><th>What you look for</th></tr></thead>
+          <tbody>
+            <tr><td><b>Analytical HPLC</b></td><td>Purity</td><td>One sharp, symmetric peak = pure. Multiple peaks = still a mixture.</td></tr>
+            <tr><td><b>LC-MS</b> (mass spec)</td><td>Molecular weight</td><td>An m/z matching the known isocoumarin (e.g. a hydroxymellein) confirms the mass.</td></tr>
+            <tr><td><b>NMR</b> (¹H &amp; ¹³C)</td><td>Full chemical structure</td><td>The proton/carbon environments that map onto the isocoumarin scaffold — the definitive ID.</td></tr>
+            <tr><td><b>UV-Vis</b></td><td>Chromophore fingerprint</td><td>An absorbance maximum characteristic of the isocoumarin ring system.</td></tr>
+            <tr><td><b>FTIR</b></td><td>Functional groups</td><td>Lactone C=O stretch, O–H, aromatic C=C — consistent with the isocoumarin.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note why"><span class="tag">Why so many instruments</span><p>Mass alone can't distinguish isomers; UV/IR alone can't give a structure. The convincing story is: <em>HPLC says pure → MS says the right mass → NMR says the right structure → UV/IR agree.</em> That layered evidence is what turns "an extract" into "compound X, ≥95% pure."</p></div>
+
+      <div class="note warn"><span class="tag">Reality check for a student lab</span><p>Prep-HPLC, LC-MS and NMR are shared/expensive instruments. If access is limited, a legitimate scaled-down version is: extract → column + TLC → analytical HPLC for purity → send one clean fraction out for MS/NMR confirmation. If you genuinely can't purify a single compound, you can still run the biology on a <strong>characterised standardised fraction</strong> and say so honestly — but a pure compound is the stronger result.</p></div>
+
+      <div class="note tip"><span class="tag">Shortcut worth knowing</span><p>If purifying enough material from mycelium is hard, some isocoumarins are commercially available as <strong>authentic standards</strong>, or can be used to spike/confirm your extract. Using a standard to confirm your peak's identity (co-elution) is a recognised, defensible method.</p></div>
+    </section>
+
+    <!-- ============ 04 FLY MODEL ============ -->
+    <section class="panel" id="flymodel">
+      <p class="eyebrow bio">Playbook 04 · Track B</p>
+      <h1>Building the disease, then delivering the drug.</h1>
+      <p class="lead">This track turns healthy flies into a Parkinson's model and gets your compound into them — all through the food they eat.</p>
+
+      <ol class="steps bio">
+        <li>
+          <h4>Rear a synchronised fly stock</h4>
+          <p>Maintain a wild-type stock (commonly <em>Canton-S</em> or <em>Oregon-R</em>) on standard cornmeal–agar–yeast medium at <strong>25&nbsp;°C, 60% humidity, 12:12 light:dark</strong>. Collect newly-eclosed adults and <strong>age-synchronise</strong> them; typically use <strong>males, 3–5 days old</strong>, so age and sex aren't confounders.</p>
+        </li>
+        <li>
+          <h4>Prepare drug-laced food</h4>
+          <p>Melt standard fly food, cool to ~50–55&nbsp;°C, then mix in the required chemicals so they're evenly distributed as the food sets. Everything is delivered orally, which is realistic (a "functional food" route) and avoids injection artefacts. Make each group's food as a separate batch.</p>
+        </li>
+        <li>
+          <h4>Induce the Parkinson's phenotype with rotenone</h4>
+          <p>Add <strong>rotenone</strong> to the food of the model and treatment groups. Typical range in the fly literature is <strong>~250–500&nbsp;µM in the food</strong> (the Coulom &amp; Birman model), fed for around <strong>7 days</strong>. Confirm the model "took" by checking that rotenone-only flies climb significantly worse than untreated controls before you trust any rescue.</p>
+        </li>
+        <li>
+          <h4>Co-administer the isocoumarin at graded doses</h4>
+          <p>Treatment groups get rotenone <em>plus</em> isocoumarin at low / mid / high concentrations (see the Chemicals tab for how to set these). Feeding is usually <strong>concurrent</strong> — the drug is present alongside the toxin so you're testing <em>protection</em>. Transfer flies to fresh food every 2–3 days so doses stay consistent.</p>
+        </li>
+        <li>
+          <h4>Run a dose-tolerability pre-screen first</h4>
+          <p>Before the main experiment, feed healthy flies the isocoumarin alone across a wide dose range and watch survival for a few days. This finds the <strong>non-toxic ceiling</strong> and sets your "high" dose sensibly — you never want your "high" dose to be killing flies through toxicity rather than disease.</p>
+        </li>
+      </ol>
+
+      <div class="note data"><span class="tag">Timing map</span><p>Day 0: sort flies into groups on their assigned food. Days 1–7: feeding period (refresh food, log any deaths daily for the lifespan curve). Day 7 (or at defined endpoints): run behavioural assays, then harvest flies for biochemistry.</p></div>
+      <div class="note warn"><span class="tag">Handling matters</span><p>Anaesthetise flies gently (CO₂ pad) and let them <strong>fully recover</strong> before any climbing assay — anaesthesia itself impairs movement and will corrupt your motor data. Count deaths at the same time each day.</p></div>
+    </section>
+
+    <!-- ============ 05 ASSAYS ============ -->
+    <section class="panel" id="assays">
+      <p class="eyebrow bio">Playbook 05 · The readouts</p>
+      <h1>The tests that turn flies into numbers.</h1>
+      <p class="lead">Three families of readout, each answering a different question: <strong>behaviour</strong> (is function preserved?), <strong>biochemistry</strong> (is oxidative damage reduced?), <strong>survival</strong> (does it help them live longer?).</p>
+
+      <h2><span class="h2-kicker">Readout 1 · Behaviour</span>The climbing (negative geotaxis) assay</h2>
+      <p>Flies instinctively climb <em>upward</em> against gravity when tapped down — a behaviour that depends on an intact dopaminergic motor system. PD-model flies climb poorly, so climbing is a direct, quantitative motor readout.</p>
+      <div class="grid g2">
+        <div class="card"><h4>How to run it</h4><p>Put ~20–30 flies in a vertical vial marked with a line ~8&nbsp;cm up. Tap them sharply to the bottom, then count the <strong>% of flies that cross the line within a set time (e.g. 10&nbsp;s)</strong>. Repeat several trials per vial and average.</p></div>
+        <div class="card"><h4>What "rescue" looks like</h4><p>Control ≈ high climbing. Rotenone-only = sharply reduced. A working dose pushes the treated group's climbing <strong>back up toward control</strong> — ideally more at higher doses.</p></div>
+      </div>
+      <div class="note tip"><span class="tag">Pro tip</span><p>Record it on video and count frame-by-frame, or use free tracking software. It removes human bias and lets you also measure <em>climbing speed</em>, a more sensitive metric than pass/fail.</p></div>
+
+      <h2><span class="h2-kicker">Readout 2 · Biochemistry</span>The oxidative-stress panel</h2>
+      <p>This is where you prove the <em>mechanism</em>. Homogenise a pooled batch of flies from each group, spin down debris, and run these on the supernatant. Always <strong>normalise to total protein</strong> (Bradford or Lowry assay) so you compare like with like.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Marker</th><th>What it means</th><th>Assay principle → the observation</th><th>Expected in rescue</th></tr></thead>
+          <tbody>
+            <tr><td><b>SOD</b><br><span style="color:var(--ink-faint);font-size:12px">superoxide dismutase</span></td><td>First-line antioxidant enzyme</td><td>Inhibition of pyrogallol / NBT auto-oxidation, read by colour change at ~420–560&nbsp;nm</td><td><b style="color:var(--sage)">↑ restored</b></td></tr>
+            <tr><td><b>CAT</b><br><span style="color:var(--ink-faint);font-size:12px">catalase</span></td><td>Clears hydrogen peroxide</td><td>Rate of H₂O₂ breakdown = falling absorbance at 240&nbsp;nm</td><td><b style="color:var(--sage)">↑ restored</b></td></tr>
+            <tr><td><b>GSH</b><br><span style="color:var(--ink-faint);font-size:12px">reduced glutathione</span></td><td>Key cellular antioxidant</td><td>Reacts with Ellman's reagent (DTNB) → yellow product at 412&nbsp;nm</td><td><b style="color:var(--sage)">↑ restored</b></td></tr>
+            <tr><td><b>MDA</b><br><span style="color:var(--ink-faint);font-size:12px">malondialdehyde (TBARS)</span></td><td>Marker of <em>lipid damage</em></td><td>Reacts with thiobarbituric acid → pink chromogen at 532&nbsp;nm</td><td><b style="color:var(--danger)">↓ lowered</b></td></tr>
+            <tr><td><b>Dopamine</b><br><span style="color:var(--ink-faint);font-size:12px">optional but powerful</span></td><td>The neurotransmitter actually lost in PD</td><td>Measured by HPLC with electrochemical detection</td><td><b style="color:var(--sage)">↑ preserved</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note why"><span class="tag">Read the pattern, not single numbers</span><p>The convincing biochemistry story is internally consistent: rotenone <em>drops</em> SOD/CAT/GSH and <em>raises</em> MDA (defences down, damage up). A working antioxidant should <em>reverse all four together</em>. If only one marker moves, be cautious in your claims.</p></div>
+
+      <h2><span class="h2-kicker">Readout 3 · Survival</span>The lifespan assay</h2>
+      <p>Keep separate cohorts per group and record deaths daily until all flies die. Plot <strong>Kaplan–Meier survival curves</strong>. Rotenone shortens lifespan; effective treatment shifts the curve <strong>rightward</strong> (flies live longer). This is your whole-organism proof that the molecular effect translates into a real benefit.</p>
+      <div class="note data"><span class="tag">What good data looks like together</span><p>Climbing improves + antioxidant enzymes recover + MDA falls + flies live longer — all moving the same direction, ideally scaling with dose. That convergence across independent readouts is far more persuasive than any one graph.</p></div>
+    </section>
+
+    <!-- ============ 06 REAGENTS ============ -->
+    <section class="panel" id="reagents">
+      <p class="eyebrow">Playbook 06 · The bench reference</p>
+      <h1>Every chemical — what it does and the signal it makes.</h1>
+      <p class="lead">This is your working reagent sheet. For each chemical: its role, a sensible working concentration, and — the part your project explicitly asks for — <strong>how it produces something you can actually observe and measure</strong>.</p>
+
+      <h3>Model &amp; treatment chemicals (go into the fly food)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Chemical</th><th>Role</th><th>Typical working level</th><th>How it becomes an observation</th></tr></thead>
+          <tbody>
+            <tr><td><b>Rotenone</b></td><td>Induces the PD model (Complex-I inhibitor)</td><td class="mono">~250–500 µM in food, ~7 days</td><td>Causes ROS + neuron loss → flies <em>climb worse</em> &amp; SOD/CAT/GSH fall. The measurable "disease."</td></tr>
+            <tr><td><b>Isocoumarin</b><br>(hydroxymellein / lentincoumarin)</td><td>Your test antioxidant</td><td class="mono">low / mid / high, set from the tolerability pre-screen (e.g. spanning a log range)</td><td>If it protects, it <em>reverses</em> the rotenone changes — the core observation of the whole study.</td></tr>
+            <tr><td><b>DMSO or ethanol</b> (trace)</td><td>Solvent / vehicle for the isocoumarin</td><td class="mono">&lt; 0.1–1% final in food</td><td>Not a signal itself — its control group proves the solvent isn't causing effects.</td></tr>
+            <tr><td><b>L-DOPA</b> or a known antioxidant</td><td>Reference ("positive") treatment</td><td class="mono">per literature for the fly model</td><td>Benchmark — shows what a <em>known</em> rescue looks like to compare yours against.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Extraction &amp; purification solvents (Track A)</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Chemical</th><th>Role</th><th>Where it's used</th></tr></thead>
+          <tbody>
+            <tr><td><b>Ethyl acetate / methanol / hexane</b></td><td>Extraction solvents (polarity series)</td><td>Pull isocoumarins out of dried mycelium</td></tr>
+            <tr><td><b>Silica gel</b></td><td>Stationary phase</td><td>Column &amp; TLC separation of the crude extract</td></tr>
+            <tr><td><b>Acetonitrile / methanol + water</b></td><td>HPLC mobile phase</td><td>Reverse-phase (C18) purification to a single peak</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Assay reagents — and the exact colour/number they give</h3>
+      <p>This is the heart of "how the chemical makes the observation." Each assay is really a chemical reaction engineered so that <strong>the amount of your marker becomes an amount of colour</strong>, which a spectrophotometer reads as a number at a specific wavelength.</p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Reagent</th><th>Assay</th><th>The chemistry → the readout</th><th>Read at</th></tr></thead>
+          <tbody>
+            <tr><td><b>DTNB</b> (Ellman's reagent)</td><td>GSH</td><td>DTNB reacts with the –SH of glutathione to release a <strong>yellow</strong> anion. More GSH = more yellow.</td><td class="mono">412 nm</td></tr>
+            <tr><td><b>Thiobarbituric acid (TBA)</b></td><td>MDA / lipid peroxidation</td><td>TBA binds MDA (a lipid-damage product) to form a <strong>pink</strong> complex. More oxidative damage = more pink.</td><td class="mono">532 nm</td></tr>
+            <tr><td><b>Pyrogallol</b> or <b>NBT</b></td><td>SOD</td><td>SOD blocks pyrogallol/NBT auto-oxidation. More SOD = <em>less</em> colour formed → % inhibition = activity.</td><td class="mono">~420 / 560 nm</td></tr>
+            <tr><td><b>Hydrogen peroxide (H₂O₂)</b></td><td>CAT</td><td>Catalase eats H₂O₂; you watch H₂O₂ absorbance <em>drop</em>. Faster drop = more catalase.</td><td class="mono">240 nm</td></tr>
+            <tr><td><b>Bradford / Lowry reagent</b></td><td>Total protein</td><td>Dye binds protein and turns <strong>blue</strong>. Lets you normalise every enzyme value per mg protein.</td><td class="mono">595 nm</td></tr>
+            <tr><td><b>DPPH</b> (optional, in-tube)</td><td>Direct antioxidant power</td><td>Purple DPPH radical is quenched by antioxidants → <strong>colour fades</strong>. A fast bench check of your compound's raw antioxidant strength <em>before</em> the fly work.</td><td class="mono">517 nm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note why"><span class="tag">The one idea that unlocks all assays</span><p>Every biochemical readout follows the same logic: <em>an invisible molecule you care about is converted into a coloured product you can see, and the depth of colour (absorbance) is proportional to how much was there.</em> The spectrophotometer just turns that colour into a number you can graph and run statistics on.</p></div>
+      <div class="note warn"><span class="tag">Safety, briefly</span><p>Rotenone is a toxin — handle with gloves, in a fume hood, dispose per protocol, and never mouth-pipette. Organic solvents are flammable and need ventilation. Follow your lab's SOPs and get sign-off from your supervisor before starting.</p></div>
+    </section>
+
+    <!-- ============ 07 DATA ============ -->
+    <section class="panel" id="data">
+      <p class="eyebrow">Playbook 07 · Making sense of it</p>
+      <h1>From raw numbers to a defensible conclusion.</h1>
+      <p class="lead">Good data collection is wasted without the right analysis. Here's what to graph, which test to run, and how to know if your result is real.</p>
+
+      <h2><span class="h2-kicker">Match the graph to the readout</span>What to plot</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Readout</th><th>Best plot</th><th>Reading it</th></tr></thead>
+          <tbody>
+            <tr><td>Climbing %</td><td>Bar chart (± SEM), groups side by side</td><td>Look for treated bars sitting between model and control, rising with dose.</td></tr>
+            <tr><td>SOD / CAT / GSH / MDA</td><td>Grouped bar charts per marker</td><td>Antioxidants recover; MDA drops. Consistency across markers = a real effect.</td></tr>
+            <tr><td>Dose–response</td><td>Line/scatter: effect vs. dose</td><td>A rising trend supports true pharmacology, not a fluke.</td></tr>
+            <tr><td>Survival</td><td>Kaplan–Meier curves</td><td>A rightward shift = longer life. Compare curves statistically.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2><span class="h2-kicker">Choosing the test</span>Which statistic, and why</h2>
+      <ul class="clean">
+        <li><strong>One-way ANOVA</strong> to compare the means across your 7 groups (climbing, each biochemical marker). ANOVA first tells you "is <em>any</em> group different?"</li>
+        <li><strong>Post-hoc test</strong> (Tukey's HSD, or Dunnett's if comparing every group back to one control) to find <em>which</em> groups differ — e.g. is TX-Hi significantly better than MODEL?</li>
+        <li><strong>Log-rank (Mantel–Cox) test</strong> to compare Kaplan–Meier survival curves.</li>
+        <li>Check assumptions (normality, equal variance); if they fail, use non-parametric equivalents (Kruskal–Wallis).</li>
+        <li>Report <strong>mean ± SEM</strong>, the test used, and the exact <strong>p-value</strong>. Treat <strong>p &lt; 0.05</strong> as significant, and mark it on graphs (* &lt;0.05, ** &lt;0.01, *** &lt;0.001).</li>
+      </ul>
+      <div class="note tip"><span class="tag">Tools</span><p>GraphPad Prism is the standard and does all of this with guided menus. Free alternatives: <strong>R</strong> (with ggplot2), or <strong>Python</strong> (pandas + scipy + seaborn). Even a careful spreadsheet handles ANOVA for a project this size.</p></div>
+
+      <h2><span class="h2-kicker">Reading the result honestly</span>What each outcome means</h2>
+      <div class="grid g3">
+        <div class="card"><h4 style="color:var(--sage)">Clear rescue</h4><p>Treated groups significantly better than model, scaling with dose, across multiple readouts. → Reject H₀. Strong result.</p></div>
+        <div class="card"><h4 style="color:var(--amber-deep)">Partial rescue</h4><p>Some markers move, others don't; only high dose works. → Real but nuanced — report it as such, don't overstate.</p></div>
+        <div class="card"><h4 style="color:var(--danger)">No effect</h4><p>Treated ≈ model. → Fail to reject H₀. This is still a valid, publishable finding — negative results matter.</p></div>
+      </div>
+      <div class="note data"><span class="tag">The credibility test</span><p>Ask of your own data: does the story hold across <em>independent</em> readouts? Behaviour, biochemistry and survival pointing the same way is far harder to dismiss than one lucky graph. Convergent evidence is the whole game.</p></div>
+    </section>
+
+    <!-- ============ 08 TIMELINE ============ -->
+    <section class="panel" id="timeline">
+      <p class="eyebrow">Playbook 08 · Logistics</p>
+      <h1>A realistic six-month run.</h1>
+      <p class="lead">Chemistry and biology can partly overlap — start growing mycelium while you set up fly stocks. Here's a workable sequence.</p>
+
+      <div class="gantt">
+        <div class="gantt-scale"><div></div><div class="months">
+          <span>M1</span><span>M2</span><span>M3</span><span>M4</span><span>M5</span><span>M6</span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div></div>
+        <div class="gantt-row"><div class="lab">Lit review &amp; ethics</div><div class="bar-track"><div class="bar a" style="left:0%;width:16%">setup</div></div></div>
+        <div class="gantt-row"><div class="lab">Mycelium culture</div><div class="bar-track"><div class="bar c" style="left:4%;width:22%">grow</div></div></div>
+        <div class="gantt-row"><div class="lab">Extract &amp; purify</div><div class="bar-track"><div class="bar c" style="left:22%;width:20%">column·HPLC</div></div></div>
+        <div class="gantt-row"><div class="lab">Characterise (MS/NMR)</div><div class="bar-track"><div class="bar c" style="left:38%;width:14%">ID</div></div></div>
+        <div class="gantt-row"><div class="lab">Fly stocks &amp; sync</div><div class="bar-track"><div class="bar b" style="left:8%;width:16%">rear</div></div></div>
+        <div class="gantt-row"><div class="lab">Dose pre-screen</div><div class="bar-track"><div class="bar b" style="left:44%;width:10%">tox</div></div></div>
+        <div class="gantt-row"><div class="lab">Main feeding + assays</div><div class="bar-track"><div class="bar b" style="left:52%;width:26%">experiment</div></div></div>
+        <div class="gantt-row"><div class="lab">Stats &amp; write-up</div><div class="bar-track"><div class="bar a" style="left:74%;width:26%">analyse·thesis</div></div></div>
+      </div>
+
+      <h2><span class="h2-kicker">Feasibility &amp; cost</span>Where the money and risk sit</h2>
+      <div class="grid g2">
+        <div class="card"><h4>Cheap &amp; low-risk</h4><p>Fly rearing, food prep, climbing assay, spectrophotometric biochemistry (SOD/CAT/GSH/MDA), DPPH. This is the affordable, robust core of the project — and where most of your <em>data</em> comes from.</p></div>
+        <div class="card"><h4>Costly / access-dependent</h4><p>Prep-HPLC, LC-MS, NMR, HPLC-ECD dopamine. Book instrument time early; have a fallback (outsource one confirmation run, or use an authentic standard) so a booking delay doesn't sink the timeline.</p></div>
+      </div>
+      <div class="note tip"><span class="tag">De-risk it</span><p>Run the fly pipeline once end-to-end with a <em>known</em> antioxidant (e.g. your reference group's compound) as a rehearsal before your precious purified isocoumarin arrives. You'll debug the assays on cheap material and be fast &amp; confident when it counts.</p></div>
+    </section>
+
+    <!-- ============ 09 WAYS ============ -->
+    <section class="panel" id="ways">
+      <p class="eyebrow">Playbook 09 · Alternatives</p>
+      <h1>Other legitimate ways to run this.</h1>
+      <p class="lead">The proposal describes one solid route. But a strong viva answer shows you know the alternatives and <em>why</em> you chose what you chose. Here are the main forks.</p>
+
+      <h2><span class="h2-kicker">Fork 1</span>Getting the compound</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Route</th><th>Pros</th><th>Cons</th></tr></thead>
+          <tbody>
+            <tr><td><b>Extract from mycelium</b> (the plan)</td><td>Novel, self-contained, "from the mushroom"</td><td>Low yield, needs purification &amp; expensive ID</td></tr>
+            <tr><td><b>Fruiting-body extraction</b></td><td>More biomass available</td><td>Slower to grow, may differ in metabolites</td></tr>
+            <tr><td><b>Buy an authentic standard</b></td><td>Pure, defined, fast, reproducible</td><td>Less "discovery"; loses the extraction story</td></tr>
+            <tr><td><b>Standardised fraction</b> (not fully pure)</td><td>Faster; still biologically testable</td><td>Weaker mechanistic claim — must characterise it</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2><span class="h2-kicker">Fork 2</span>Building the Parkinson's model</h2>
+      <ul class="clean">
+        <li><strong>Rotenone-fed flies (the plan)</strong> — cheap, oxidative-stress mechanism matches your antioxidant hypothesis perfectly. Best fit here.</li>
+        <li><strong>Paraquat</strong> — another oxidative-stress toxin; a good confirmatory second model if you want to show the effect isn't rotenone-specific.</li>
+        <li><strong>Genetic PD flies</strong> (e.g. <em>parkin</em> or <em>α-synuclein</em> mutants) — mimic <em>inherited</em> PD; powerful but needs specific fly lines and more expertise.</li>
+        <li><strong>Scaling up to rodents</strong> — the natural "next paper," not a student first project: costly, slow, heavy ethics. Your fly result is the <em>justification</em> for someone doing this later.</li>
+      </ul>
+
+      <h2><span class="h2-kicker">Fork 3</span>Adding depth to the readouts</h2>
+      <ul class="clean">
+        <li><strong>Dopaminergic neuron imaging</strong> — immunostain the fly brain for tyrosine hydroxylase and count surviving dopaminergic neurons. Direct anatomical proof of neuroprotection.</li>
+        <li><strong>Gene-expression (qPCR)</strong> — measure antioxidant/inflammatory genes to show <em>how</em> protection works, not just that it happens.</li>
+        <li><strong>Extra behaviour</strong> — startle-induced climbing speed, or activity monitors, for finer motor resolution.</li>
+        <li><strong>Molecular docking (in silico)</strong> — model how your isocoumarin binds antioxidant-pathway targets; cheap, adds a mechanistic chapter, no wet lab.</li>
+      </ul>
+
+      <div class="note why"><span class="tag">How to present the choice</span><p>Frame your chosen route as the sweet spot of <strong>novelty × feasibility × mechanistic fit</strong>: mycelial extraction gives you a discovery angle, the rotenone model matches your antioxidant hypothesis, and the fly system keeps it affordable. Knowing the alternatives is exactly what separates a strong project from a recipe followed blindly.</p></div>
+    </section>
+
+    <!-- ============ 10 REFS ============ -->
+    <section class="panel" id="refs">
+      <p class="eyebrow">Playbook 10 · Toolkit</p>
+      <h1>References, glossary, and a pre-flight checklist.</h1>
+
+      <h2><span class="h2-kicker">Your cited literature</span>What each source gives you</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Reference</th><th>Why it's in your project</th></tr></thead>
+          <tbody>
+            <tr><td><b>Xu et al.</b>, <span class="sci">J. Fungi</span>, 2024, 10(8):552</td><td>The source for shiitake isocoumarins (hydroxymelleins, lentincoumarins) and their antioxidant activity — your <em>compound</em> rationale.</td></tr>
+            <tr><td><b>Coulom &amp; Birman</b>, <span class="sci">J. Neurosci.</span>, 2004, 24(48):10993–10998</td><td>The foundational rotenone-<span class="sci">Drosophila</span> Parkinson's model — your <em>disease-model</em> method and dose range.</td></tr>
+            <tr><td><b>De Silva et al.</b>, <span class="sci">Nutrients</span>, 2023, 15(9):1913</td><td>Mushroom bioactives as neuroprotective / functional-food agents — your <em>significance</em> and translational framing.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2><span class="h2-kicker">Glossary</span>Fast definitions for your write-up</h2>
+      <div class="grid g2">
+        <div class="card"><p><b>Isocoumarin</b> — a small lactone-ring aromatic secondary metabolite; the compound class you're testing.</p><p><b>Negative geotaxis</b> — the innate upward-climbing reflex used as a motor readout.</p><p><b>Complex I</b> — the mitochondrial enzyme rotenone blocks, triggering ROS.</p></div>
+        <div class="card"><p><b>ROS</b> — reactive oxygen species; the damaging molecules at the heart of the disease.</p><p><b>TBARS / MDA</b> — the lipid-peroxidation readout for oxidative damage.</p><p><b>Kaplan–Meier</b> — the survival-curve method for the lifespan assay.</p></div>
+      </div>
+
+      <h2><span class="h2-kicker">Pre-flight checklist</span>Before you start collecting data</h2>
+      <ul class="clean">
+        <li>Hypotheses (H₀/H₁) written down and testable.</li>
+        <li>All 7 groups defined, including vehicle and reference controls.</li>
+        <li>Fly numbers &amp; replicates calculated; scoring plan blinded.</li>
+        <li>Rotenone dose confirmed to produce a real climbing deficit (model validated).</li>
+        <li>Isocoumarin tolerability pre-screen done → doses fixed.</li>
+        <li>Compound purity/identity evidence in hand (or fraction characterised).</li>
+        <li>Every assay normalised to total protein.</li>
+        <li>Stats plan chosen (ANOVA + post-hoc; log-rank for survival).</li>
+        <li>Safety sign-off from supervisor; solvent &amp; toxin handling reviewed.</li>
+      </ul>
+
+      <div class="footer-note">
+        Educational study playbook · built for the BMS project<br>
+        "Neuroprotective Potential of Shiitake Mushroom-Derived Isocoumarins in a Drosophila Model of Parkinson's Disease"<br>
+        Kavinsree · Shreya — Guide: Dr. V. Deepa Parvathi · Dept. of Biomedical Sciences.<br>
+        Concentrations and methods here are typical literature ranges — always validate against your own lab's protocols and your cited papers before running anything.
+      </div>
+    </section>
+
+    </div><!-- /wrap -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.panel'));
+  var sel = document.getElementById('mobileNav');
+
+  function show(id){
+    panels.forEach(function(p){ p.classList.toggle('active', p.id===id); });
+    tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.tab===id); });
+    if(sel) sel.value = id;
+    var main = document.querySelector('.main');
+    if(main) main.scrollTop = 0;
+    window.scrollTo({top:0, behavior:'auto'});
+  }
+
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){ show(t.dataset.tab); });
+    // build mobile options
+    if(sel){
+      var o = document.createElement('option');
+      o.value = t.dataset.tab;
+      o.textContent = t.textContent.replace(/\d+$/,'').trim();
+      sel.appendChild(o);
+    }
+  });
+  if(sel){ sel.addEventListener('change', function(){ show(sel.value); }); }
+})();
+</script>
+</body>
+</html>
