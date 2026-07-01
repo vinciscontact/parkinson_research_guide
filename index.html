@@ -103,6 +103,10 @@ p{margin:12px 0}
 .lead{font-size:18.5px;line-height:1.55;color:var(--ink-soft);max-width:64ch}
 strong{font-weight:600;color:var(--ink)}
 a{color:var(--amber-deep);text-decoration:underline;text-underline-offset:2px;text-decoration-thickness:1px}
+.reflinks{display:inline-flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px}
+.reflinks a{font-family:var(--mono);font-size:12px;text-decoration:none;color:var(--teal);
+  border:1px solid #c2ddd9;background:var(--teal-wash);padding:3px 9px;border-radius:20px;white-space:nowrap}
+.reflinks a:hover{background:var(--teal);color:#fff;border-color:var(--teal)}
 .mono{font-family:var(--mono)}
 .sci{font-style:italic}
 
@@ -692,14 +696,47 @@ ul.clean li::marker{color:var(--amber)}
       <h2><span class="h2-kicker">Your cited literature</span>What each source gives you</h2>
       <div class="tbl-wrap">
         <table>
-          <thead><tr><th>Reference</th><th>Why it's in your project</th></tr></thead>
+          <thead><tr><th style="width:34%">Reference &amp; links</th><th>Why it's in your project</th></tr></thead>
           <tbody>
-            <tr><td><b>Xu et al.</b>, <span class="sci">J. Fungi</span>, 2024, 10(8):552</td><td>The source for shiitake isocoumarins (hydroxymelleins, lentincoumarins) and their antioxidant activity — your <em>compound</em> rationale.</td></tr>
-            <tr><td><b>Coulom &amp; Birman</b>, <span class="sci">J. Neurosci.</span>, 2004, 24(48):10993–10998</td><td>The foundational rotenone-<span class="sci">Drosophila</span> Parkinson's model — your <em>disease-model</em> method and dose range.</td></tr>
-            <tr><td><b>De Silva et al.</b>, <span class="sci">Nutrients</span>, 2023, 15(9):1913</td><td>Mushroom bioactives as neuroprotective / functional-food agents — your <em>significance</em> and translational framing.</td></tr>
+            <tr>
+              <td>
+                <b>Ref 1 · Xu, X.; Yu, C.; Liu, Z.; Cui, X.; Guo, X.; Wang, H.</b><br>
+                Chemical Composition, Antioxidant and Anti-Inflammatory Activity of Shiitake Mushrooms (<span class="sci">Lentinus edodes</span>). <span class="sci">J. Fungi</span> 2024, 10(8), 552.<br>
+                <span class="reflinks">
+                  <a href="https://doi.org/10.3390/jof10080552" target="_blank" rel="noopener">DOI ↗</a>
+                  <a href="https://www.mdpi.com/2309-608X/10/8/552" target="_blank" rel="noopener">Full text (open access) ↗</a>
+                  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11355609/" target="_blank" rel="noopener">PMC ↗</a>
+                </span>
+              </td>
+              <td>The source for shiitake isocoumarins (lentincoumarins, hydroxymelleins) and their antioxidant/anti-inflammatory activity — your <em>compound</em> rationale.</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Ref 2 · Coulom, H.; Birman, S.</b><br>
+                Chronic exposure to rotenone models sporadic Parkinson's disease in <span class="sci">Drosophila melanogaster</span>. <span class="sci">J. Neurosci.</span> 2004, 24(48), 10993–10998.<br>
+                <span class="reflinks">
+                  <a href="https://doi.org/10.1523/JNEUROSCI.2993-04.2004" target="_blank" rel="noopener">DOI ↗</a>
+                  <a href="https://www.jneurosci.org/content/24/48/10993" target="_blank" rel="noopener">Full text ↗</a>
+                  <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6730201/" target="_blank" rel="noopener">PMC ↗</a>
+                </span>
+              </td>
+              <td>The foundational rotenone-<span class="sci">Drosophila</span> Parkinson's model — your <em>disease-model</em> method and the 250–500&nbsp;µM dose range.</td>
+            </tr>
+            <tr>
+              <td>
+                <b>Ref 3 · Liuzzi, G.M.; Petraglia, T.; Latronico, T.; Crescenzi, A.; Rossano, R.</b><br>
+                Antioxidant Compounds from Edible Mushrooms as Potential Candidates for Treating Age-Related Neurodegenerative Diseases. <span class="sci">Nutrients</span> 2023, 15(8), 1913.<br>
+                <span class="reflinks">
+                  <a href="https://doi.org/10.3390/nu15081913" target="_blank" rel="noopener">DOI ↗</a>
+                  <a href="https://www.mdpi.com/2072-6643/15/8/1913" target="_blank" rel="noopener">Full text (open access) ↗</a>
+                </span>
+              </td>
+              <td>Mushroom antioxidants as neuroprotective / functional-food agents against oxidative-stress-driven neurodegeneration — your <em>significance</em> and translational framing.</td>
+            </tr>
           </tbody>
         </table>
       </div>
+      <div class="note warn"><span class="tag">Fix this before submission</span><p>Your proposal lists Ref 3 as <em>"De Silva et al., Nutrients 2023, 15(9):1913."</em> The exact locator (Nutrients, vol&nbsp;15, article&nbsp;1913, 2023) resolves to the article above by <strong>Liuzzi et&nbsp;al., issue 15(8)</strong> — the author name and issue number differ from your draft. Verify against the DOI and correct the citation so it matches the paper you're actually citing.</p></div>
 
       <h2><span class="h2-kicker">Glossary</span>Fast definitions for your write-up</h2>
       <div class="grid g2">
